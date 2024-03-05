@@ -1,0 +1,10 @@
+$('.chats').append(`
+    <div class="chat-fukidashi" style='text-align: right;'>
+      <strong><%= j @message.content %></strong><br>
+      ${'<%= @message.created_at %>'}
+      <!--created_atはMessageモデルに含まれる属性なので-->
+    </div>
+`)
+<!--chatsクラスの最後にappendメソッドを使って上記の要素を表示する-->
+$('input[type=text]').val("")
+<!--非同期通信なのでテキストボックスの値を空にする-->

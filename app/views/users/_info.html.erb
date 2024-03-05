@@ -18,23 +18,35 @@
   </tr>
 </table>
 　
-<div class='row'>
+<div class='row justify-content-around align-items-center'>
   <% if current_user != user %>
-    <td><%= render "relationships/btn", user: user %></td>
+    <%= render "relationships/btn", user: user %>
+    
     <% if @user != current_user %>
+    <!--@userと現在ログインしているユーザーが異なるユーザーの時-->
       <% if (current_user.following?(@user)) && (@user.following?(current_user)) %>
+      <!--@userと現在ログインしているユーザーが相互フォローの関係の時-->
         <% if @isRoom == true %>
-          <%= link_to "チャットへ",  room_path(@roomId)%>
+        <!--@isRoomが trueなら（現在ログインしているユーザーと@userが共通のRoomをすでに持っていたら）-->
+          <%= link_to "chatへ",  room_path(@roomId), class: "btn btn-primary" %>
+          <!--「chatを始める」というリンクを表示-->
         <% else %>
-          <%= form_for @room do |f| %>
+        <!--@isRoomが falseなら（現在ログインしているユーザーと@userが共通のRoomをまだ持っていなかったら）-->
+          <%= form_with model: @room do |f| %>
+          <!--Roomsコントローラのcreateアクションに送信するためのform-->
             <%= fields_for @entry do |e| %>
+            <!--@roomに紐づいた@entryモデルのデータも一緒に送信するためのfields_for-->
               <%= e.hidden_field:user_id, value: @user.id %>
+            <!--user_id = @user.idの roomとentryを作成-->
+            <!--フォームが送信されるときにuser_idの値がサーバーに送信-->
             <% end %>
-            <%= f.submit "チャットを始める", class: "btn btn-primary user-show-chat" %>
+            <%= f.submit "chatを始める", class: "btn btn-primary user-show-chat" %>
+            <!--「チャットを始める」ボタンを押すと、@user.idが Roomsコントローラの createメソッドに渡される-->
           <% end %>
         <% end %>
       <% end %>
     <% end %>
+    
   <% else %>
     <%= link_to edit_user_path(user), class: "btn btn-outline-secondary btn-block edit_user_#{user.id}" do %>
       <i class="fas fa-user-cog"></i>

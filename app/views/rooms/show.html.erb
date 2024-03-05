@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="left-button mb-4">
+    <%= link_to "ユーザー一覧に戻る", users_path, class:"btn btn-info" %>
+  </div>
+
+  <% @entries.each do |e| %>
+    <% unless e.user == current_user %>
+    <h2><%= e.user.name %>さんとのチャットルーム</h2>
+    <% end %>
+  <% end %>
+  <!--Roomsコントローラ showメソッドで定義した@roomに入ってる2つのentriesのうち、
+  current_userでない方のuserのnameを使って、チャットルーム名を表示-->
+
+  <hr>
+  <div class="chat">
+    <div class="chats">
+      <% if @messages.present? %>
+      <!--既に送付済みの Roomsコントローラの@messagesが存在するならば、-->
+        <% @messages.each do |m| %>
+        <!--@messagesを一つずつ取り出して、contentを表示-->
+          <% if m.user_id == current_user.id %>
+              <div class="chat-fukidashi" style="text-align: right;">
+                <strong><%= m.content %></strong>
+              </div>
+              <!--自分が送付したメッセージなら text-align: right;-->
+          <% else %>
+              <div class="chat-fukidashi" style="text-align: left;">
+                <strong><%= m.content %></strong>
+              </div>
+              <!--相手が送付したメッセージなら text-align: left; に-->
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="errors">
+      <%= render "layouts/errors", obj: @message %>
+    </div>
+    <!--エラーの表示-->
+
+    <div class="posts mt-4">
+      <%= form_with model: @message, local: false do |f| %>
+      <!--Messagesコントローラのcraeteアクションに送信、非同期通信のためにlocal: falseに-->
+        <%= f.text_field :content, placeholder: "140字以内でメッセージを入力してください", size: 70, class: "form-text-field" %>
+        <%= f.hidden_field :room_id, value: @room.id %>
+        <!--room_idに @room.idを代入-->
+        <%= f.submit "投稿", class: "form-submit" %>
+      <% end %>
+    </div>
+  </div>
+</div>
