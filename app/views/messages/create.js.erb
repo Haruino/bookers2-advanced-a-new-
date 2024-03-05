@@ -1,8 +1,10 @@
+<!--Messagesコントローラの createアクションが実行された後の表示-->
 $('.chats').append(`
     <div class="chat-fukidashi" style='text-align: right;'>
       <strong><%= j @message.content %></strong><br>
+      <!--チャットメッセージの内容-->
       ${'<%= @message.created_at %>'}
-      <!--created_atはMessageモデルに含まれる属性なので-->
+      <!--日時の表示、created_atはMessageモデルに含まれる属性なので@messageを忘れずに-->
     </div>
 `)
 <!--chatsクラスの最後にappendメソッドを使って上記の要素を表示する-->
