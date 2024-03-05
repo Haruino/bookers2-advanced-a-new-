@@ -5,9 +5,9 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @currentUserEntry = Entry.where(user_id: current_user.id)
-    # entriesテーブルのuser_idカラムから現在ログインしているユーザーの全Entryデータを取得
+    # entriesテーブルの中に記録されている現在ログインしているユーザーのuser_idが含まれているレコードを取得
     @userEntry = Entry.where(user_id: @user.id)
-    # entriesテーブルのuser_idカラムから@userの全Entryデータを取得。
+    # entriesテーブルの中に記録されている@userで取得したユーザーのuser_idが含まれているレコードを取得
     unless @user.id == current_user.id
       # @user と current_user が別人の時
       @currentUserEntry.each do |cu| 
@@ -15,16 +15,18 @@ class UsersController < ApplicationController
         @userEntry.each do |u| 
           # @userの全Entryデータを1つずつ取り出して、変数uに代入
           if cu.room_id == u.room_id 
-            # もし現在ログインしているユーザーのEntryデータのうち、room_idが@userのEntryデータの持つroom_idと同じなら
+            # もし現在ログインしているユーザーのEntryデータのroom_idが@userのEntryデータの持つroom_idと同じなら
             @isRoom = true
             # 現在ログインしているユーザーと@userの共通のRoomがあることを明確に
+            # DMのルームが未作成の場合の処理を後に実行するので必要
             @roomId = cu.room_id
             # そして@roomIdにその現在ログインしているユーザーと@userの共通のroom_id(entriesテーブル)を代入
+            # DMのルームに行くリンクのパスを設定するために記述
           end
         end
       end
       
-      unless @isRoom
+      if @isRoom != true
         # 現在ログインしているユーザーと@userの共通のRoomがない時
         @room = Room.new
         @entry = Entry.new
