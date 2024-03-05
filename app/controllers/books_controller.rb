@@ -5,6 +5,11 @@ class BooksController < ApplicationController
   def show
     @book = Book.find(params[:id])
     @book_comment = BookComment.new
+    unless ViewCount.find_by(user_id: current_user.id, book_id: @book.id)
+      # 現在のユーザーのIDと指定された本(@book)のIDを持つViewCountレコードを検索 = 閲覧したかどうかを
+      current_user.view_counts.create(book_id: @book.id)
+      # レコードがない時は現在のユーザーのIDと指定された本のIDを含んだViewCountレコードを作成
+    end
   end
 
   def index

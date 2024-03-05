@@ -4,6 +4,7 @@ class Book < ApplicationRecord
   has_many :favorites, dependent: :destroy
   has_many :favorited_users, through: :favorites, source: :user
   # bookにfavoriteしたusersの情報を取得するために　book.favorited_usersで可能
+  has_many :view_counts, dependent: :destroy
   
   validates :title,presence:true
   validates :body,presence:true,length:{maximum:200}

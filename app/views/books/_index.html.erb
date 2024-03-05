@@ -20,6 +20,8 @@
             <%= render "favorites/btn", book: book %>
         </td>
         <td><%= render "book_comments/counter", book: book %></td>
+        <td>閲覧数 <%= book.view_counts.count %></td>
+        <!--特定の本(@book)に関連付けられたViewCountレコードの数を数える-->
       </tr>
     <% end %>
   </tbody>
